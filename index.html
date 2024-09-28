@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMERICAN PRESIDENTS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>AMERICAN PRESIDENTS</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Who was the first President of the United States?", answer: "George Washington." },
+        { question: "Which President issued the Emancipation Proclamation?", answer: "Abraham Lincoln." },
+        { question: "Who was the only U.S. President to serve four terms?", answer: "Franklin D. Roosevelt." },
+        { question: "Which President was in office during the Great Depression?", answer: "Herbert Hoover." },
+        { question: "Who was the first President to live in the White House?", answer: "John Adams." },
+        { question: "Which President is known for the New Deal?", answer: "Franklin D. Roosevelt." },
+        { question: "Who was the first Vice President to become President after the death of a sitting President?", answer: "John Tyler." },
+        { question: "Which President signed the Civil Rights Act of 1964?", answer: "Lyndon B. Johnson." },
+        { question: "Who was President during World War I?", answer: "Woodrow Wilson." },
+        { question: "Which President famously said, \"The only thing we have to fear is fear itself\"?", answer: "Franklin D. Roosevelt." },
+        { question: "Who was the first President to be impeached?", answer: "Andrew Johnson." },
+        { question: "Which President is known for the Gettysburg Address?", answer: "Abraham Lincoln." },
+        { question: "Who was the only President to resign from office?", answer: "Richard Nixon." },
+        { question: "Which President was a former actor and starred in films before politics?", answer: "Ronald Reagan." },
+        { question: "Who was the first African American President of the United States?", answer: "Barack Obama." },
+        { question: "Which President is known for the slogan \"A chicken in every pot\"?", answer: "Herbert Hoover." },
+        { question: "Who was the youngest President to assume office?", answer: "Theodore Roosevelt." },
+        { question: "Which President was known for his \"Trust-Busting\" policies?", answer: "Theodore Roosevelt." },
+        { question: "Who was President during the Cuban Missile Crisis?", answer: "John F. Kennedy." },
+        { question: "Which President had a pet goat named \"White House Billy\"?", answer: "William Howard Taft." },
+        { question: "Who was the first President to be born in a hospital?", answer: "Jimmy Carter." },
+        { question: "Which President was responsible for the Louisiana Purchase?", answer: "Thomas Jefferson." },
+        { question: "Who was President when women gained the right to vote?", answer: "Woodrow Wilson." },
+        { question: "Which President delivered the famous \"I Have a Dream\" speech?", answer: "Martin Luther King Jr. (not a president, but associated with the civil rights movement during President Johnson's era)." },
+        { question: "Who was the first President to travel outside the U.S. while in office?", answer: "Theodore Roosevelt." },
+        { question: "Which President was known for his \"Square Deal\" policies?", answer: "Theodore Roosevelt." },
+        { question: "Who was the only President to serve non-consecutive terms?", answer: "Grover Cleveland." },
+        { question: "Which President was known for the \"Fair Deal\"?", answer: "Harry S. Truman." },
+        { question: "Who was President during the Watergate scandal?", answer: "Richard Nixon." },
+        { question: "Which President is associated with the phrase \"Big Stick diplomacy\"?", answer: "Theodore Roosevelt." },
+        { question: "Who was President during the Vietnam War?", answer: "Lyndon B. Johnson." },
+        { question: "Which President signed the Affordable Care Act into law?", answer: "Barack Obama." },
+        { question: "Who was the first President to use radio to address the American people?", answer: "Calvin Coolidge." },
+        { question: "Which President initiated the \"War on Poverty\"?", answer: "Lyndon B. Johnson." },
+        { question: "Who was the last President of the 20th century?", answer: "Bill Clinton." },
+        { question: "Which President is known for the phrase \"Let me be clear\"?", answer: "Barack Obama." },
+        { question: "Who was the first President to appoint a woman to the Supreme Court?", answer: "Ronald Reagan (Sandra Day O'Connor)." },
+        { question: "Which President is known for his \"Fourteen Points\" speech?", answer: "Woodrow Wilson." },
+        { question: "Who was the first President to ride in a car?", answer: "William Howard Taft." },
+        { question: "Which President led the nation during the majority of World War II?", answer: "Franklin D. Roosevelt." },
+        { question: "Who was the President that said, \"Government's first duty is to protect the people, not run their lives\"?", answer: "Ronald Reagan." },
+        { question: "Which President was a former governor of California?", answer: "Ronald Reagan." },
+        { question: "Who was President during the signing of the Treaty of Paris, which ended the Revolutionary War?", answer: "George Washington." },
+        { question: "Which President is known for the \"Moral Majority\"?", answer: "Ronald Reagan." },
+        { question: "Who was the first President to have a telephone installed in the White House?", answer: "Rutherford B. Hayes." },
+        { question: "Which President was known for his foreign policy called \"Containment\"?", answer: "Harry S. Truman." },
+        { question: "Who was the President during the assassination of Abraham Lincoln?", answer: "Andrew Johnson (he became President after Lincoln's assassination)." },
+        { question: "Which President was a founding member of the Democratic-Republican Party?", answer: "Thomas Jefferson." },
+        { question: "Who was the President when the Berlin Wall fell?", answer: "George H.W. Bush." },
+        { question: "Which President famously declared, \"Tear down this wall\"?", answer: "Ronald Reagan (referring to the Berlin Wall)." }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
